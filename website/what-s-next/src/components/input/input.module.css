@@ -1,0 +1,88 @@
+.rootInput, .root input, .tabBefore, .tabAfter {
+    padding: 0 0.75em;
+    line-height: 2.5;
+    width: 300px;
+    border: 0.2rem solid #8a4de6;
+    transition: all 0.2s ease-in-out;
+    border-radius: 25px;
+}
+.root {
+    position: relative;
+    display: inline-flex;
+}
+.root .loadingIcon {
+    
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+    height: 2em;
+    width: 2em;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+}
+.root input {
+    flex-grow: 1;
+    background: #fff;
+    padding-right: 0;
+    font-size: 15px;
+}
+.root input:focus {
+    border-color: #462c6c;
+}
+.root input:hover {
+    border: 0.2rem solid #462c6c;
+}
+.root input[disabled] {
+    cursor: not-allowed;
+    background: #ededed;
+    color: #d8d8d8;
+}
+.root input[disabled]::placeholder {
+    color: #d8d8d8;
+}
+.root.loading input {
+    padding-right: 2em;
+}
+.inline {
+    display: inline-block;
+}
+.inline input {
+    display: inline-block;
+}
+.inputWithIcon > input {
+    padding-left: 2.5em;
+}
+.inputWithIcon > svg {
+    color: #d8d8d8;
+    position: absolute;
+    height: 1em;
+    top: 0;
+    bottom: 0;
+    left: 0.75em;
+    margin: auto 0;
+    display: inline-block;
+    transform: translateY(-0.05em);
+}
+.tabBefore {
+    display: inline-block;
+    background: #fafafa;
+    border-right: 0;
+}
+.tabBefore ~ input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.tabAfter {
+    display: inline-block;
+    background: #fafafa;
+    border-left: 0;
+}
+.tabAfter ~ input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.loadingIcon circle {
+    stroke: #676767;
+}
