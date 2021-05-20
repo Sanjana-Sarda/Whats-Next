@@ -16,7 +16,6 @@ def inimovie(nservices, ngenres):
     ds.drop(['Age', 'Directors', 'Country', 'Language', 'Runtime', 'Year'] + nservices, axis =1, inplace=True)
     ds.dropna(subset=['Genres'], inplace = True)
     ds.reset_index(inplace=True, drop=True)
-    ds.Year = ds.Year.astype("object")
     ds['Rotten Tomatoes'] = ds['Rotten Tomatoes'].str.rstrip('%').astype('float') / 100.0
 
     service = [x for x in services if x not in nservices]
