@@ -18,7 +18,19 @@
     npm install
     npm run develop
     ```
-
+    If you run into any issues try forcing npm to reinstall packages 
+    ```shell
+    # 
+    rm -rf node-modules .cache
+    rm package-lock.json
+    npm install
+    ```
+    If there's missing packages/dependencies use:
+    ```shell
+    # 
+    npm install [package]
+    npm install --save-dev [package]
+    ```
 2.  **Open Chrome without CORS**
 
     I use terminal on MacOS to supress web security.  A better way is to host with a non-localhost url, but for testing I went this because it's simplier.
@@ -32,12 +44,12 @@
     
 3.  **Run the socket.io server**
 
-    Depending you might not need to npm init (especially not after the first time).  Without the server, the two users cannot connect. 
+    Might need to run npm init instead of install. Note, without this server, the two users cannot connect. 
     
     ```shell
     # 
     cd server
-    npm init
+    npm install
     node server.js
     ```
    
