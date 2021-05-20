@@ -3,7 +3,7 @@
 from flask import Flask, request, render_template, Response
 #from flask_cors import CORS
 import json
-from tutils import inimovie
+from tutils import inimovie, recsmovie
 
 
 
@@ -18,6 +18,20 @@ def rm():
         nservices = info["nservices"]
         ngenres = info["ngenres"]
         movies = inimovie(nservices, ngenres)
+        return movies
+    else:
+        return "Go Away"
+
+@app.route('/recs', methods=['POST'])
+def rec():
+    if request.method == "POST":
+        info = json.loads(request.data)
+        nservices = info["nservices"]
+        ngenres = info["ngenres"]
+        first = info["first"]
+        second = info["second"]
+        history = info["history"]
+        movies = recsmovie(nservices, ngenres, first, second, history)
         return movies
     else:
         return "Go Away"
