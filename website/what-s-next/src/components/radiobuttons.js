@@ -5,6 +5,10 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import { StylesProvider} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid'
+
+import "./radiobuttons.css"
 
 const { Component } = React;
 
@@ -13,28 +17,32 @@ const { Component } = React;
 class RadioButtons extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            people: this.props.people
-        }
     }
     render() {
         console.log("Radio Buttons called")
-        console.log(this.state.people)
+        console.log(this.props.people)
         return(
             <FormControl component="fieldset">
-                <FormLabel component="legend">Found Nearby Friends...</FormLabel>
-                <RadioGroup aria-label="gender" name="gender1" value={this.props.value} onChange={this.props.onChange}>
-                    {this.state.people && this.state.people.map(function(labels){
-                        return <div>
+                <FormLabel component="legend">Searching For Nearby Users...</FormLabel>
+
+                <StylesProvider injectFirst>
+                <RadioGroup aria-label="people" name="people1" value={this.props.value} onChange={this.props.onChange}>
+                    <div className="ginger" >
+                    {this.props.people && this.props.people.map(function(labels,i){
+                        return <div key={i}>
                             <FormControlLabel 
                                 value={labels.name}
                                 control={<Radio />}
                                 label={labels.name}
                                 onChange={this.props.onChange}
+                                
                             />
                             </div>
                     }, this)}
+                    </div>
+                    
                 </RadioGroup>
+                </StylesProvider>
             </FormControl>
         )
     }

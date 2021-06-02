@@ -1,0 +1,67 @@
+.MiuPaper-root{
+    background-color: black;
+}
+.MiuStepper-root{
+    background-color: black;
+}
+
+.MuiPaper-root.MuiStepper-root.MuiStepper-horizontal.main_stepper-module--stepper--1fMp4.MuiStepper-alternativeLabel.MuiPaper-elevation0 {
+    background-color:black;
+}
+
+
+.MuiStepLabel-label {
+    color: rgb(255 255 255 / 51%);
+}
+
+.MuiStepLabel-label.MuiStepLabel-active {
+    color: #70DCF1;
+    font-weight: 500;
+}
+
+.MuiStepLabel-label.MuiStepLabel-completed {
+    color: #70DCF1;
+    font-weight: 500;
+}
+
+.MuiCheckbox-root {
+    color: rgb(255 255 255 / 54%);
+}
+
+.MuiRadio-colorSecondary.Mui-checked {
+    color: #70dcf1;
+}
+
+.MuiFormControl-root {
+    color: white;
+}
+
+.MuiFormGroup-root {
+    margin: 10px;
+}
+
+legend.MuiFormLabel-root {
+    color: rgb(255 255 255 / 51%);
+}
+
+label.MuiFormControlLabel-root {
+    margin: 5px;
+}
+
+span.MuiIconButton-label {
+    margin-right: 5px;
+}
+
+div.ginger{
+    overflow:scroll; 
+    max-height: 100px;
+}
+
+.MuiFormLabel-root.Mui-focused {
+    color: white;
+}
+
+
+
+
+

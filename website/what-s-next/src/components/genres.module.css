@@ -1,0 +1,9 @@
+.root {
+    
+    width: 350px;
+    max-height: 150px;  
+    justify-content: center;
+    overflow: scroll; 
+    margin-top: 10px;
+
+}

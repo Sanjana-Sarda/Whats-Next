@@ -1,0 +1,37 @@
+.root {
+    background-color: black;
+}
+
+.container1 {
+    display: flex;
+    max-width: 700px; 
+    min-height: 500px; 
+    justify-content: center;
+    border: 4px solid #C978E9;
+    margin: auto;
+
+}
+
+.container2 {
+    display: flex;
+    max-width: 675px; 
+    min-height: 475px; 
+    justify-content: center;
+    border: 4px solid #70DCF1;
+
+}
+.active {
+    max-width: 500px;
+    max-height: 700px;
+  }
+
+  .image {
+      max-width: 500px;
+  }
+
+  .heading {
+      color:lightcoral; 
+      
+  }
+
+  

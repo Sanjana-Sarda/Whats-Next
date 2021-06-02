@@ -1,0 +1,15 @@
+legend.Mui-focused.MuiFormLabel-root {
+    color: white;
+}
+
+.MuiIconButton-colorSecondary {
+    color: white;
+}
+
+.MuiCheckbox-colorSecondary.Mui-checked {
+    color: #70dcf1;
+}
+
+legend.MuiFormLabel-root {
+    text-align: center;
+}

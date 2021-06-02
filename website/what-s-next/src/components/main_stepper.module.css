@@ -1,0 +1,46 @@
+.root{
+    display: flex; 
+    flex-grow: 1; 
+}
+
+.radiobtns{
+    padding:10px;
+    margin-top:5px;
+
+}
+
+
+.submit_btn {
+    float: right;
+    padding: 5px; 
+    
+}
+
+.textfield {
+    display: flex; 
+    padding-top: 40px; 
+}
+
+.stepper {
+    width: 100%;
+    
+
+}
+
+.title {
+    color: white; 
+}
+
+.titleLogo{
+    margin-bottom:5px;
+}
+
+.startMatchingBtn{
+    padding:10px;
+}
+
+.finalPage{
+    margin-top:50px;
+    margin-bottom:50px;
+}
+

@@ -1,0 +1,34 @@
+.MuiRadio-colorSecondary.Mui-checked {
+    color: #70dcf1;
+}
+
+.MuiFormControl-root {
+    color: white;
+}
+
+.MuiFormGroup-root {
+    margin: 10px;
+}
+
+legend.MuiFormLabel-root {
+    color: rgb(255 255 255 / 51%);
+}
+
+label.MuiFormControlLabel-root {
+    margin: 5px;
+}
+
+span.MuiIconButton-label {
+    margin-right: 5px;
+}
+
+div.ginger{
+    overflow:scroll; 
+    max-height: 100px;
+}
+
+div.servicesContainer{
+    height:150px;
+    margin-top: 10px;
+}
+
