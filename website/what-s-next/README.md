@@ -1,39 +1,60 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby minimal starter
-</h1>
 
-## 🚀 Quick start
+## 🚀 Start Developing
 
-1.  **Create a Gatsby site.**
+1.  **Use Gatsby to startup the site**
 
-    Use the Gatsby CLI to create a new site, specifying the minimal starter.
+    Use the Gatsby CLI to build the website.
 
     ```shell
-    # create a new Gatsby site using the minimal starter
-    npm init gatsby
+    # if you don't have gatsby installed already
+    npm install -g gatsby-cli
+    cd what-s-next
+    gatsby develop
     ```
-
-2.  **Start developing.**
-
-    Navigate into your new site’s directory and start it up.
-
+    Alternatively, you can try only with npm (I haven't tested this!)
     ```shell
-    cd my-gatsby-site/
+    # 
+    cd what-s-next
+    npm install
     npm run develop
     ```
+    If you run into any issues try forcing npm to reinstall packages 
+    ```shell
+    # 
+    rm -rf node-modules .cache
+    rm package-lock.json
+    npm install
+    ```
+    If there's missing packages/dependencies use:
+    ```shell
+    # 
+    npm install [package]
+    npm install --save-dev [package]
+    ```
+2.  **Open Chrome without CORS**
 
-3.  **Open the code and start customizing!**
+    I use terminal on MacOS to supress web security.  A better way is to host with a non-localhost url, but for testing I went this because it's simplier.
 
-    Your site is now running at http://localhost:8000!
+    ```shell
+    open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
+    ```
+    Navigate to http://localhost:8000
+    
+    WARNING: THIS DOES HAVE A SECURITY RISK. MAKE SURE TO RE-ENABLE WHEN GOING BACK TO NORMAL TASKS> 
+    
+3.  **Run the socket.io server**
 
-    Edit `src/pages/index.js` to see your site update in real-time!
+    Might need to run npm init instead of install. Note, without this server, the two users cannot connect. 
+    
+    ```shell
+    # 
+    cd server
+    npm install
+    node server.js
+    ```
+   
 
-4.  **Learn more**
+## 🚀 Learn more about gatsby
 
     - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
 
@@ -46,9 +67,3 @@
     - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
 
     - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-## 🚀 Quick start (Gatsby Cloud)
-
-Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
-
-[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-minimal)
