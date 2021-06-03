@@ -58,6 +58,9 @@ class MainApp extends Component {
         this.setState({ username: val.target.value });
     }
     addOtherUsers = (val) => {
+        console.log("Add other users call"); 
+        console.log(this.state.people);
+        console.log(val)
         if (val !== this.state.username){
             if(this.state.people.indexOf(val) === -1)
                 this.setState({people: this.state.people.concat({name: val})});
@@ -90,8 +93,9 @@ class MainApp extends Component {
     }
 
     addPerson = (val) => {
+        
         if (val !== this.state.username){
-            if(this.state.people.indexOf(val) == -1)
+            if(this.state.people.indexOf(val) === -1)
                 this.setState({people: this.state.people.concat({name: val})});
         } 
     }
@@ -105,6 +109,9 @@ class MainApp extends Component {
         console.log("Index handle next called");
         console.log(this.state.activeStep);
         this.setState({activeStep: this.state.activeStep+1});
+        if(this.state.activeStep === 2) {
+            //socket call for first movie 
+        }
     }
  
     handleBack = () => {
