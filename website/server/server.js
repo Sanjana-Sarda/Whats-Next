@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -41,13 +43,7 @@ io.sockets.on('connection', function(socket) {
         socket.join(room);
     });
 
-    socket.history = [];
-    socket.nservices = ['Disney+', 'Prime Video', 'Hulu', 'Netflix'];
-    socket.ngenres = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
-      'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'];
-    socket.first = [];
-    socket.second = [];
-    socket.third = [];
+    
     
     //client sending username 
     socket.on('send-nickname', function(nickname) {
@@ -58,6 +54,16 @@ io.sockets.on('connection', function(socket) {
             }
             
         });
+        socket.history = [];
+        socket.nservices = ['Disney+', 'Prime Video', 'Hulu', 'Netflix'];
+        socket.ngenres = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 
+                          'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 
+                          'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
+                          'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 
+                          'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'];
+        socket.first = [];
+        socket.second = [];
+        socket.third = [];
         console.log(socket.name)
     });
 
@@ -76,21 +82,22 @@ io.sockets.on('connection', function(socket) {
     });
     
     socket.on('pick_first_movie', function (){
-      const reqstuff = {
+      
+      reqstuff = {
         method: 'post', 
         url: 'https://whats-next-188.herokuapp.com/ini',
         data: {
-          nservices = socket.nservices,
-          ngenres = socket.ngenres
-        }
-      };
+            'nservices': socket.nservices,
+            'ngenres': socket.ngenres
+          }
+      }
       axios.post(reqstuff)
       .then(response => {
         var obj = JSON.parse(response);
         socket.first = obj.first;
         socket.second = obj.second;
       });
-      socket.emit(socket.first);
+      socket.emit('Sending First Movie',socket.first);
     });
     
   
