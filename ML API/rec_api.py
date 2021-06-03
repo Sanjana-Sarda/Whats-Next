@@ -27,6 +27,7 @@ def rm():
 def rec():
     if request.method == "POST":
         info = json.loads(request.data)
+        print (info)
         nservices = info["nservices"]
         ngenres = info["ngenres"]
         first = info["first"]
