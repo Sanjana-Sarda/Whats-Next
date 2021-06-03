@@ -18,6 +18,13 @@ import starfaceIcon  from '../images/starface_icon.svg'
 import thumbsupIcon from '../images/thumbsup_icon.svg'
 import trashIcon from '../images/trash_icon.svg'
 import frownIcon from '../images/frown_icon.svg'
+import unicornLogo from "../images/unicornLogo.svg"
+
+import TitleLine from "/src/images/title_line.svg"
+
+import { StylesProvider} from '@material-ui/core/styles';
+
+import "./button.css"
 
 const ENDPOINT = "http://lvh.me:4001/"; //"http://lvh.me:4001";
 
@@ -392,12 +399,24 @@ class MainApp extends Component {
             <div>  
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
                 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-                
+                <StylesProvider injectFirst>
                 <Grid container direction="row" justify="center" alignItems="center" className={homeStyles.container1} > 
                     <Grid container direction="row" justify="center" alignItems="center" className={homeStyles.container2} >
                     {this.state.activeStep === 0 &&
                     (
-                        <Button variant="contained" color="primary" onClick={() => this.handleNext()}>Start</Button>
+                        <Grid container direction="column" justify="center" alignItems="center">
+                            <img src={unicornLogo} height={150} width={300} alt="unicorn logo"/>
+                            
+                            <img src={TitleLine} alt="titleline"/>
+                            <Grid container className={homeStyles.textcontainer}>
+                            <Typography variant="body2" component="p" className={homeStyles.starttext}>
+                                A ML-driven application to find movie recommendations between two people. 
+                                Click start to find what movie you should watch next. 
+                            </Typography>
+                            </Grid>
+                            <Button variant="contained"  onClick={() => this.handleNext()} className={homeStyles.btnstyle}>Start</Button>
+                        </Grid>
+                        
                     )}
                     {this.state.activeStep === 1 &&
                     (
@@ -431,22 +450,25 @@ class MainApp extends Component {
                                 <Grid>
                                 <IconButton aria-label="delete" onClick={() => this.movieClick(1)}>
                                    
-                                   <img src={frownIcon} height={50} width={50} />
+                                   <img src={frownIcon} height={50} width={50} alt="frown icon"/>
                                     
                                 </IconButton>
-                                <IconButton aria-label="delete" onClick={() => this.movieClick(3)}>
-                                   
-                                        <img src={thumbsupIcon} height={50} width={50}/>
-                                    
-                                </IconButton>
+                                
                                 <IconButton aria-label="delete" onClick={() => this.movieClick(2)}>
                                    
-                                        <img src={trashIcon} height={50} width={50}/>
+                                        <img src={trashIcon} height={50} width={50} alt="trash icon"/>
                                     
                                 </IconButton>
+
+                                <IconButton aria-label="delete" onClick={() => this.movieClick(3)}>
+                                   
+                                        <img src={thumbsupIcon} height={50} width={50} alt="thumbs up icon"/>
+                                    
+                                </IconButton>
+
                                 <IconButton aria-label="delete" onClick={() => this.movieClick(4)}>
                                  
-                                        <img src={starfaceIcon} height={50} width={50}/>
+                                        <img src={starfaceIcon} height={50} width={50} alt="starface icon"/>
                                    
                                 </IconButton>
                                 </Grid>
@@ -479,6 +501,7 @@ class MainApp extends Component {
 
                     </Grid>          
                 </Grid>
+                </StylesProvider>
             </div>
             
         );

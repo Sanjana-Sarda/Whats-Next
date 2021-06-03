@@ -19,6 +19,8 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 import TitleLine from "/src/images/title_line.svg"
 
+
+
 const { Component } = React;
 
 const QontoConnector = withStyles({
@@ -274,7 +276,7 @@ class MainStepper extends Component {
                             
                         </div> 
                         <br/>
-                        <Button variant="contained" color="primary" onClick={this.onSubmitUsername} className={styles.submit_btn} >
+                        <Button variant="contained"  onClick={this.onSubmitUsername} className={styles.submit_btn} >
                                 {'Next'}
                         </Button>
                     </Grid>)}
@@ -286,7 +288,7 @@ class MainStepper extends Component {
                         onChange={this.props.setFriend}/>
                         </div>
                         <br/>
-                        <Button variant="contained" color="primary" onClick={this.onSubmitFriend} className={styles.submit_btn} style={{marginLeft:-10,marginTop:-20}}>
+                        <Button variant="contained"  onClick={this.onSubmitFriend} className={styles.submit_btn} style={{marginLeft:-10,marginTop:-20}}>
                                 {'Next'}
                         </Button>
                     </Grid>)}
@@ -295,7 +297,7 @@ class MainStepper extends Component {
                     (<Grid item xs={12} >
                         <ServiceCheckboxes onChange={this.getServices}/>
                         <br/>
-                        <Button variant="contained" color="primary" onClick={this.onSubmitSerivces} className={styles.submit_btn} style={{marginLeft:-15,marginTop:-10}}>
+                        <Button variant="contained"  onClick={this.onSubmitSerivces} className={styles.submit_btn} style={{marginLeft:-15,marginTop:-10}}>
                                 {'Next'}
                         </Button>
                     </Grid>)}
@@ -304,7 +306,7 @@ class MainStepper extends Component {
                     (<Grid item xs={12} >
                         <GenresCheckboxes onChange={this.getGenres}/>
                         <br/>
-                        <Button variant="contained" color="primary" onClick={this.onSubmitGenres} className={styles.submit_btn} style={{marginLeft:-10}} >
+                        <Button variant="contained"  onClick={this.onSubmitGenres} className={styles.submit_btn} style={{marginLeft:-10}} >
                                 {'Next'}
                         </Button>
                     </Grid>)}
@@ -312,7 +314,7 @@ class MainStepper extends Component {
                     {this.state.activeStep === 4 &&
                     (<Grid item xs={12} >
                         <div className={styles.finalPage}>
-                            <Button variant="contained" color="primary" onClick={this.props.finishOptions} className={styles.startMatchingBtn} >
+                            <Button variant="contained"  onClick={this.props.finishOptions} className={styles.startMatchingBtn} >
                                     {'Start Matching'}
                             </Button>
                         </div>
@@ -335,8 +337,11 @@ class MainStepper extends Component {
                         <div>
                             {this.state.activeStep === this.state.steps.length ? (
                                 <div>
-                                    <Typography>All steps completed</Typography>
-                                    <Button variant="contained" color="primary" onClick={this.handleReset}>Reset</Button>
+                                  <Button disabled={this.state.activeStep === 0} color="primary" onClick={this.handleBack}>
+                                            Back
+                                        </Button>
+    
+                                    <Button variant="contained"  onClick={this.handleReset}>Reset</Button>
                                 </div>
                             ):(
                                 <div>
@@ -344,7 +349,7 @@ class MainStepper extends Component {
                                         <Button disabled={this.state.activeStep === 0} color="primary" onClick={this.handleBack}>
                                             Back
                                         </Button>
-                                        <Button variant="contained" color="primary" onClick={this.handleNext}>
+                                        <Button variant="contained"  onClick={this.handleNext}>
                                             {this.state.activeStep === this.state.steps.length - 1 ? 'Finish' : 'Next'}
                                         </Button>
                                         

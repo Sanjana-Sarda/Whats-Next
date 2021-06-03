@@ -54,6 +54,21 @@
   .cardbuttons{
       background: black; 
   }
+  .bodytext{
+      max-width: 300px; 
+  }
+  .btnstyle{
+      background: #C978E9; 
+      color: white;
+  }
+  .starttext{
+      color: white;
+      text-align: center;
+  }
+  .textcontainer{
+      max-width:300px; 
+      padding: 10px;
+  }
 
 
 

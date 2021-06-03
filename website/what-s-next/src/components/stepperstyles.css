@@ -64,4 +64,15 @@ div.ginger{
 
 
 
+.MuiButton-contained{
+    background: #C978E9; 
+    color: white;
+  
+}
+
+.MuiButton-textPrimary {
+    color: #C978E9;
+}
+
+
 
