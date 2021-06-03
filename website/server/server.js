@@ -36,9 +36,21 @@ var clients = [];
 
 io.sockets.on('connection', function(socket) {
     clients.push(socket);
+    socket.history = [];
+        socket.nservices = ['Disney+', 'Prime Video', 'Hulu', 'Netflix'];
+        socket.ngenres = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 
+                          'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 
+                          'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
+                          'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 
+                          'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'];
+        socket.first = [];
+        socket.second = [];
+        socket.third = [];
+        socket.fourratings = []; 
     // once a client has connected, we expect to get a ping from them saying what room they want to join
     socket.on('room', function(room) {
         socket.join(room);
+        
     });
 
     
@@ -52,17 +64,32 @@ io.sockets.on('connection', function(socket) {
             }
             
         });
-        socket.history = [];
-        socket.nservices = ['Disney+', 'Prime Video', 'Hulu', 'Netflix'];
-        socket.ngenres = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 
-                          'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 
-                          'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
-                          'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 
-                          'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'];
-        socket.first = [];
-        socket.second = [];
-        socket.third = [];
+        
         console.log(socket.name)
+    });
+
+    socket.on('swiped-four',function(movie){
+      console.log("got swiped four"); 
+      socket.fourratings.push(movie); 
+      clients.forEach(function (cl){
+        console.log("Client name in swiped four"); 
+        console.log(cl.name); 
+        if(cl.name !== socket.name){
+          if(cl.fourratings !== []){
+            if(cl.fourratings.indexOf(movie) != -1){
+              console.log("match found"); 
+              socket.emit("match found",movie);
+              cl.emit("match found", movie); 
+            } 
+            else {
+              console.log("third movie"); 
+              cl.emit("adding third movie",movie);
+            }
+          }
+          
+        }
+        })
+        
     });
 
     socket.on('settings', function (services, genres){

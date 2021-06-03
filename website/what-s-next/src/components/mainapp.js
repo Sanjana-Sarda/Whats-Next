@@ -19,14 +19,14 @@ import thumbsupIcon from '../images/thumbsup_icon.svg'
 import trashIcon from '../images/trash_icon.svg'
 import frownIcon from '../images/frown_icon.svg'
 
-const ENDPOINT = "https://whats-next-server.herokuapp.com/"; //"http://lvh.me:4001";
+const ENDPOINT = "http://lvh.me:4001/"; //"http://lvh.me:4001";
 
 
 const { Component } = React;
 
 const socket = socketIOClient(ENDPOINT);
 var room = "abc123";
-socket.on('connect', function() {
+socket.on('connection', function() {
     // Connected, let's sign-up for to receive messages for this room
     socket.emit('room', room);
     console.log("Connecting room....")
@@ -74,6 +74,7 @@ class MainApp extends Component {
             movie_image_url: "", 
             movie_description: "",
             
+            final_movie: "", 
 
             activeStep: 0, 
         }
@@ -99,6 +100,28 @@ class MainApp extends Component {
             this.addOtherUsers(user)
             console.log("New User Joined ")
             console.log(this.state.people)
+        }.bind(this));
+    }
+    setFinalMovie = (movie) => {
+        console.log(this.state.final_movie); 
+        this.setState({activeStep: 3,
+            final_movie: movie}); 
+    }
+    waitForMatch = () => {
+        socket.on("match found", function(movie) {
+            // Connected, let's sign-up for to receive messages for this room
+            this.setFinalMovie(movie);
+            
+        }.bind(this));
+    }
+    setThirdMovie = (movie) => {
+        console.log("Set third movie"); 
+        console.log(this.state.third_movie); 
+        this.setState({third_movie: [movie]});
+    }
+    waitforThird = () => {
+        socket.on("adding third movie", function(movie){
+            this.setThirdMovie(movie); 
         }.bind(this));
     }
     submitUsername = (e) =>  {
@@ -192,13 +215,21 @@ class MainApp extends Component {
                 });     
         }
     }
-    makeMovieRequest = async () => {
+     makeMovieRequest = async () => {
         console.log("Movie Request called");
         console.log({'nservices':this.state.nservices,
         'ngenres':this.state.ngenres,
         'first': this.state.first_movie,
         'second': this.state.second_movie,
         'history': this.state.history});
+        let joined = []; 
+        joined = joined.concat(this.state.first_movie[0]);
+        joined = joined.concat(this.state.second_movie[0]);
+        if(this.state.third_movie.length > 1)
+            joined = joined.concat(this.state.third_movie[0]);
+        this.setState({ 
+            history: this.state.history.concat(joined)
+        }); 
         await axios.post(`https://whats-next-188.herokuapp.com/recs`,  {'nservices':this.state.nservices,
                                                                         'ngenres':this.state.ngenres,
                                                                         'first': this.state.first_movie,
@@ -207,49 +238,54 @@ class MainApp extends Component {
                 .then(res => {
                     console.log(res);
                     console.log(res.data);
-                    this.setState({first_movie: this.state.first_movie.concat(res.data.first),
-                                   second_movie: this.state.second_movie.concat(res.data.second)}, () => {
+                    
+                    this.setState({first_movie: [res.data.first],
+                                   second_movie: [res.data.second]}, () => {
                         this.getMovieInfo(this.state.first_movie[0])
                     });
                 })
                 .catch(err => {
                     console.log(err); 
                 });
-        let joined = []; 
-        joined = joined.concat(this.state.first_movie[0]);
-        joined = joined.concat(this.state.second_movie[0]);
-        joined = joined.concat(this.state.third_movie[0]);
-        this.setState({ 
-            history: this.state.history.concat(joined)
-        });   
+          
+        
 
     }
-    movieClick = (rating) => {
+    movieClick = async (rating) => {
         console.log("Movie Click called");
         console.log(this.state.first_movie);
         console.log(this.state.second_movie);
         console.log(this.state.third_movie);
-        if(rating === 4) {
-            //emit to socket 
-        }
+
         if(this.state.first_movie.length === 1){
+            if(rating === 4) {
+                socket.emit('swiped-four', this.state.first_movie[0])
+            }
             this.setState({ 
                 first_movie: this.state.first_movie.concat([rating])
             });
             this.getMovieInfo(this.state.second_movie[0]);
+            
         }
         else if(this.state.second_movie.length === 1){
             if(this.state.third_movie.length===1){
+                if(rating === 4) {
+                    socket.emit('swiped-four', this.state.second_movie[0])
+                }
                 this.setState({ 
                     second_movie: this.state.second_movie.concat([rating])
                 });
                 this.getMovieInfo(this.state.third_movie[0]);
+                
             }
             else {
+                if(rating === 4) {
+                    socket.emit('swiped-four', this.state.second_movie[0])
+                }
                 this.setState({ 
                     second_movie: this.state.second_movie.concat([rating])
                 }, () => {
-                    this.makeMovieRequest();
+                     this.makeMovieRequest();
                 });
             
             }
@@ -257,11 +293,15 @@ class MainApp extends Component {
  
         }
         else {
+            
             if(this.state.third_movie.length === 1){
+                if(rating === 4) {
+                    socket.emit('swiped-four', this.state.third_movie[0])
+                }
                 this.setState({ 
                     third_movie: this.state.third_movie.concat([rating])
                 }, () => {
-                    this.makeMovieRequest();
+                     this.makeMovieRequest();
                 });
                 
             }
@@ -297,6 +337,9 @@ class MainApp extends Component {
   
     }
 
+
+    
+
     handleNext = () => {
         console.log("Index handle next called");
         this.setState({activeStep: this.state.activeStep+1}, () => {
@@ -314,13 +357,37 @@ class MainApp extends Component {
 
     handleReset = () => {
         console.log("reset called")
-        this.setState({activeStep: 1});
+        this.setState({activeStep: 1,
+            username: '',
+            friend: '',
+            people: [],
+            response: '',
+            history: [],
+            nservices: ['Disney+', 'Prime Video', 'Hulu', 'Netflix'],
+            ngenres: ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 
+                          'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 
+                          'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
+                          'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 
+                          'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'],
+            first_movie: [],
+            second_movie: [],
+            third_movie: [],
+
+            picked_services: [], 
+            picked_genres: [], 
+            next_movie: [],
+
+            movie_title: "", 
+            movie_image_url: "", 
+            movie_description: "",});
     }
 
     
 
     render() {
         this.findOtherUsers();
+        this.waitforThird(); 
+        this.waitForMatch(); 
         return (
             <div>  
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -394,6 +461,18 @@ class MainApp extends Component {
                         </div>
                         
                       
+                    )}
+                    {this.state.activeStep === 3 &&
+                    (
+                        <div>
+                            <Typography variant="body2" component="p" className={homeStyles.cardfont}>
+                                Match Found!
+                            </Typography>
+                            <Typography gutterBottom variant="h5" component="h2" className={homeStyles.cardfont}>
+                                {this.state.final_movie}
+                            </Typography>
+                        </div>
+                        
                     )}
                         
 
