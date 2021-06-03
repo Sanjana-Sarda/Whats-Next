@@ -1,11 +1,17 @@
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography';
 
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid'
 import * as homeStyles from "/src/components/mainapp.module.css"
 import MainStepper from '/src/components/main_stepper'
 import Button from '@material-ui/core/Button';
 import socketIOClient from "socket.io-client";
+import axios from 'axios'; 
 const ENDPOINT = "http://lvh.me:4001";
 
 
@@ -30,6 +36,7 @@ makeRequest () {
 
 */
 
+
 const testing_ppl = [{name: "Bob"},{name: "Ginger"},{name: "Shitshow"},{name: "Hollow"}]
 
 class MainApp extends Component {
@@ -41,13 +48,25 @@ class MainApp extends Component {
             friend: '',
             people: [],
             response: '',
-            nservices: [], 
-            ngenres: [],
+            history: [],
+            nservices: ['Disney+', 'Prime Video', 'Hulu', 'Netflix'],
+            ngenres: ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 
+                          'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 
+                          'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
+                          'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 
+                          'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'],
+            first_movie: [],
+            second_movie: [],
+            third_movie: [],
 
             picked_services: [], 
             picked_genres: [], 
-            next_movies: [],
-            history: [], //{name: "", rating: #}
+            next_movie: [],
+
+            movie_title: "", 
+            movie_image_url: "", 
+            movie_description: "",
+            
 
             activeStep: 0, 
         }
@@ -62,7 +81,8 @@ class MainApp extends Component {
         console.log(this.state.people);
         console.log(val)
         if (val !== this.state.username){
-            if(this.state.people.indexOf(val) === -1)
+            //vendors.filter(e => e.Name === 'Magenic').length > 0
+            if(!(this.state.people.some(e=> e.name===val)))
                 this.setState({people: this.state.people.concat({name: val})});
         } 
     }
@@ -100,19 +120,114 @@ class MainApp extends Component {
         } 
     }
 
-    submitServices = (e) => {
+    submitServices = (serv) => {
+        this.setState({
+            picked_services: serv,
+        }, () => {
+            console.log(this.state.picked_services);
+        });
+        var arr = [...this.state.nservices];
+        serv.forEach((s) => {
+            
+            var index = arr.indexOf(s); 
+            console.log("Service Index");
+            console.log(index);
+            if(index !== -1){
+                arr.splice(index,1);
+                
+            }
+        });
+        this.setState({
+            nservices: arr
+        }, () => {
+            console.log(this.state.nservices);
+        }); 
         console.log("services submitted"); 
-        console.log(this.state.picked_services);
+    }
+    submitGenres = (gen) => {
+        this.setState({
+            picked_genres: gen,
+        }, () => {
+            console.log(this.state.picked_genres);
+        });
+        var arr = [...this.state.ngenres];
+        gen.forEach( (s) => {
+            var index = arr.indexOf(s); 
+            console.log(index);
+            if(index !== -1){
+                arr.splice(index,1);
+                
+            }
+        });
+        this.setState({
+            ngenres: arr
+        }, () => {
+            console.log(this.state.ngenres);
+        }); 
+        console.log("genres submitted"); 
+
+    }
+
+    makeFirstMovieRequest = () => {
+        if(this.state.activeStep === 2) {
+            console.log("Requesting first movie api")
+            const req = {
+                nservices: this.state.nservices,
+                ngenres: this.state.ngenres,
+            };
+            const req2 = JSON.stringify(req); 
+            console.log(req2); 
+            axios.post(`https://whats-next-188.herokuapp.com/ini`, { req2 })
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data);
+                })
+                .catch(err => {
+                    console.log(err); 
+                    this.setState({first_movie: ["The Dark Knight"]}, () => {
+                        this.getMovieInfo(this.state.first_movie[0])
+                    });
+                });
+            /* socket.emit('pick_first_movie');
+            socket.on('Sending First Movie', function(val){
+                console.log("Getting socket first movie"); 
+                console.log(val);
+            }); */
+            
+        }
+    }
+
+    getMovieInfo = async (m) => {
+        console.log("attempting movie search"); 
+        const url = `https://api.themoviedb.org/3/search/movie?api_key=08d1fafe7afc10001a91d0af8a2ab33d&language=en-US&query=${m}&page=1&include_adult=false`;
+        try {
+            const res = await fetch(url);
+            const data  = await res.json();
+            console.log(data.results[0].id);
+            //original_title, overview, poster_path https://image.tmbd.org/t/p/w185_and_h278_bestv2/{poster_path}
+            this.setState({
+                movie_title: data.results[0].original_title, 
+                movie_description: data.results[0].overview, 
+                movie_image_url: 'https://image.tmdb.org/t/p/original/'
+                                 + data.results[0].poster_path,
+            }, () => {
+                console.log(this.state.movie_image_url)
+            });
+        }catch(err){
+            console.log("No movie info found");
+            console.error(err);
+        }
+  
     }
 
     handleNext = () => {
         console.log("Index handle next called");
-        console.log(this.state.activeStep);
-        this.setState({activeStep: this.state.activeStep+1});
-        if(this.state.activeStep === 2) {
-            //socket call for first movie 
-        }
+        this.setState({activeStep: this.state.activeStep+1}, () => {
+            this.makeFirstMovieRequest();
+        });
+        
     }
+
  
     handleBack = () => {
        console.log("Index handle back called");
@@ -137,7 +252,7 @@ class MainApp extends Component {
                 
                 <Grid container direction="row" justify="center" alignItems="center" className={homeStyles.container1} > 
                     <Grid container direction="row" justify="center" alignItems="center" className={homeStyles.container2} >
-                    {this.state.activeStep == 0 &&
+                    {this.state.activeStep === 0 &&
                     (
                         <Button variant="contained" color="primary" onClick={() => this.handleNext()}>Start</Button>
                     )}
@@ -146,11 +261,39 @@ class MainApp extends Component {
                         <MainStepper username={this.state.username} setUsername={this.setUsername} submitUsername={this.submitUsername}
                                      friend={this.state.friend} people={this.state.people} setFriend={this.setFriend} submitFriend={this.submitFriend} 
                                      picked_services={this.state.picked_services} submitServices={this.submitServices}
+                                     picked_genres={this.state.picked_genres} submitGenres={this.submitGenres}
                                      finishOptions={this.handleNext}/>
                     )}
                     {this.state.activeStep === 2 &&
                     (
-                        <Button variant="contained" color="primary" onClick={this.handleReset}>Reset</Button>
+                        <div>
+                        
+                        <Card className={homeStyles.card}>
+                            <CardActionArea >
+                                <CardMedia
+                                className={homeStyles.cardmedia}
+                                image={this.state.movie_image_url}
+                                title={this.state.movie_title}
+                                />
+                                <CardContent className={homeStyles.cardtext}>
+                                    <Typography gutterBottom variant="h5" component="h2" className={homeStyles.cardfont}>
+                                        {this.state.movie_title}
+                                    </Typography>
+                                    <Typography variant="body2" component="p" className={homeStyles.cardfont}>
+                                        {this.state.movie_description}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                            <CardActions  className={homeStyles.cardbuttons}>
+                            <Button variant="contained" color="primary" onClick={this.handleReset}>
+                                Reset
+                            </Button>
+                            </CardActions>
+                        </Card>
+                       
+                        </div>
+                        
+                      
                     )}
                         
 

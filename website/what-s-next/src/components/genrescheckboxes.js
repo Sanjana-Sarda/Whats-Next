@@ -44,6 +44,7 @@ class GenresCheckboxes extends Component {
                                 control={<Checkbox />}
                                 labelPlacement={this.state.lP}
                                 label={item.name}
+                                onChange={this.props.onChange}
                             />
                             </Grid>
                     }, this)}

@@ -6,7 +6,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { StylesProvider} from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid'
 
 import "./radiobuttons.css"
 
@@ -15,9 +14,7 @@ const { Component } = React;
 
 
 class RadioButtons extends Component {
-    constructor(props) {
-        super(props)
-    }
+
     render() {
         console.log("Radio Buttons called")
         console.log(this.props.people)
