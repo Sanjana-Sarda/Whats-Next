@@ -1,5 +1,3 @@
-const axios = require('axios')
-
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -83,20 +81,20 @@ io.sockets.on('connection', function(socket) {
     
     socket.on('pick_first_movie', function (){
       
-      reqstuff = {
-        method: 'post', 
-        url: 'https://whats-next-188.herokuapp.com/ini',
-        data: {
-          "nservices": socket.nservices,
-          "ngenres": socket.ngenres
-        }
-      };
-      axios.post(reqstuff)
-      .then(response => {
-        var obj = JSON.parse(response);
-        socket.first = obj.first;
-        socket.second = obj.second;
-      });
+      // reqstuff = {
+      //   method: 'post', 
+      //   url: 'https://whats-next-188.herokuapp.com/ini',
+      //   data: {
+      //     "nservices": socket.nservices,
+      //     "ngenres": socket.ngenres
+      //   }
+      // };
+      // axios.post(reqstuff)
+      // .then(response => {
+      //   var obj = JSON.parse(response);
+      //   socket.first = obj.first;
+      //   socket.second = obj.second;
+      // });
       socket.emit('Sending First Movie',socket.first);
     });
     
@@ -131,24 +129,24 @@ io.sockets.on('connection', function(socket) {
         socket.emit(socket.third); 
       }
       else {
-        const reqstuff = {
-          method: 'post', 
-          url: 'https://whats-next-188.herokuapp.com/recs',
-          data: {
-            'nservices': socket.nservices,
-            'ngenres': socket.ngenres,
-            'first': socket.first,
-            'second': socket.second,
-            'history': socket.history
-          }
-        };
-        axios.post(reqstuff)
-        .then(response => {
-          var obj = JSON.parse(response);
-          socket.first = obj.first;
-          socket.second = obj.second;
-          socket.history = history + socket.first
-        });
+        // const reqstuff = {
+        //   method: 'post', 
+        //   url: 'https://whats-next-188.herokuapp.com/recs',
+        //   data: {
+        //     'nservices': socket.nservices,
+        //     'ngenres': socket.ngenres,
+        //     'first': socket.first,
+        //     'second': socket.second,
+        //     'history': socket.history
+        //   }
+        // };
+        // axios.post(reqstuff)
+        // .then(response => {
+        //   var obj = JSON.parse(response);
+        //   socket.first = obj.first;
+        //   socket.second = obj.second;
+        //   socket.history = history + socket.first
+        // });
         socket.emit(socket.first); 
       }
     
