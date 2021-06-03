@@ -454,9 +454,7 @@ class MainApp extends Component {
                             </CardActions>
                         </Card>
 
-                        <Button variant="contained" color="primary" onClick={this.handleReset}>
-                                    Reset
-                                </Button>
+                        
                        
                         </div>
                         
@@ -471,6 +469,9 @@ class MainApp extends Component {
                             <Typography gutterBottom variant="h5" component="h2" className={homeStyles.cardfont}>
                                 {this.state.final_movie}
                             </Typography>
+                            <Button variant="contained" color="primary" onClick={this.handleReset}>
+                                Reset
+                            </Button>
                         </div>
                         
                     )}
