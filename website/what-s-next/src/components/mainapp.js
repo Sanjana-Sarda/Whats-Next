@@ -13,7 +13,8 @@ import Button from '@material-ui/core/Button';
 import socketIOClient from "socket.io-client";
 import axios from 'axios'; 
 import IconButton from '@material-ui/core/IconButton';
-import { ReactComponent as starfaceIcon }  from '../images/starface_icon.svg'
+import { Icon } from "@material-ui/core";
+import starfaceIcon  from '../images/starface_icon.svg'
 import thumbsupIcon from '../images/thumbsup_icon.svg'
 import trashIcon from '../images/trash_icon.svg'
 import frownIcon from '../images/frown_icon.svg'
@@ -174,34 +175,104 @@ class MainApp extends Component {
 
     }
 
-    makeFirstMovieRequest = () => {
+    makeFirstMovieRequest = async () => {
         if(this.state.activeStep === 2) {
             console.log("Requesting first movie api")
-            const req = {
-                nservices: this.state.nservices,
-                ngenres: this.state.ngenres,
-            };
-            const req2 = JSON.stringify({req}); 
-            console.log(req2); 
-            axios.post(`https://whats-next-188.herokuapp.com/ini`, { req2 })
+            await axios.post(`https://whats-next-188.herokuapp.com/ini`,  {'nservices':this.state.nservices,'ngenres':this.state.ngenres} )
                 .then(res => {
                     console.log(res);
                     console.log(res.data);
+                    this.setState({first_movie: this.state.first_movie.concat(res.data.first),
+                                    second_movie: this.state.second_movie.concat(res.data.second)}, () => {
+                        this.getMovieInfo(this.state.first_movie[0])
+                    });
                 })
                 .catch(err => {
                     console.log(err); 
-                    this.setState({first_movie: ["The Dark Knight"]}, () => {
-                        this.getMovieInfo(this.state.first_movie[0])
-                    });
-                });
-            /* socket.emit('pick_first_movie');
-            socket.on('Sending First Movie', function(val){
-                console.log("Getting socket first movie"); 
-                console.log(val);
-            }); */
-            
+                });     
         }
     }
+    makeMovieRequest = async () => {
+        console.log("Movie Request called");
+        console.log({'nservices':this.state.nservices,
+        'ngenres':this.state.ngenres,
+        'first': this.state.first_movie,
+        'second': this.state.second_movie,
+        'history': this.state.history});
+        await axios.post(`https://whats-next-188.herokuapp.com/recs`,  {'nservices':this.state.nservices,
+                                                                        'ngenres':this.state.ngenres,
+                                                                        'first': this.state.first_movie,
+                                                                        'second': this.state.second_movie,
+                                                                        'history': this.state.history} )
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data);
+                    this.setState({first_movie: this.state.first_movie.concat(res.data.first),
+                                   second_movie: this.state.second_movie.concat(res.data.second)}, () => {
+                        this.getMovieInfo(this.state.first_movie[0])
+                    });
+                })
+                .catch(err => {
+                    console.log(err); 
+                });
+        let joined = []; 
+        joined = joined.concat(this.state.first_movie[0]);
+        joined = joined.concat(this.state.second_movie[0]);
+        joined = joined.concat(this.state.third_movie[0]);
+        this.setState({ 
+            history: this.state.history.concat(joined)
+        });   
+
+    }
+    movieClick = (rating) => {
+        console.log("Movie Click called");
+        console.log(this.state.first_movie);
+        console.log(this.state.second_movie);
+        console.log(this.state.third_movie);
+        if(rating === 4) {
+            //emit to socket 
+        }
+        if(this.state.first_movie.length === 1){
+            this.setState({ 
+                first_movie: this.state.first_movie.concat([rating])
+            });
+            this.getMovieInfo(this.state.second_movie[0]);
+        }
+        else if(this.state.second_movie.length === 1){
+            if(this.state.third_movie.length===1){
+                this.setState({ 
+                    second_movie: this.state.second_movie.concat([rating])
+                });
+                this.getMovieInfo(this.state.third_movie[0]);
+            }
+            else {
+                this.setState({ 
+                    second_movie: this.state.second_movie.concat([rating])
+                }, () => {
+                    this.makeMovieRequest();
+                });
+            
+            }
+            
+ 
+        }
+        else {
+            if(this.state.third_movie.length === 1){
+                this.setState({ 
+                    third_movie: this.state.third_movie.concat([rating])
+                }, () => {
+                    this.makeMovieRequest();
+                });
+                
+            }
+            
+        }
+        console.log("Updated movies"); 
+        console.log(this.state.first_movie);
+        console.log(this.state.second_movie);
+        console.log(this.state.third_movie);
+    }
+
 
     getMovieInfo = async (m) => {
         console.log("attempting movie search"); 
@@ -246,8 +317,7 @@ class MainApp extends Component {
         this.setState({activeStep: 1});
     }
 
-
-
+    
 
     render() {
         this.findOtherUsers();
@@ -291,14 +361,35 @@ class MainApp extends Component {
                                 </CardContent>
                             </CardActionArea>
                             <CardActions  className={homeStyles.cardbuttons}>
-                            <Button variant="contained" color="primary" onClick={this.handleReset}>
-                                Reset
-                            </Button>
-                            <IconButton aria-label="delete">
-                                <starfaceIcon />
-                            </IconButton>
+                                <Grid>
+                                <IconButton aria-label="delete" onClick={() => this.movieClick(1)}>
+                                   
+                                   <img src={frownIcon} height={50} width={50} />
+                                    
+                                </IconButton>
+                                <IconButton aria-label="delete" onClick={() => this.movieClick(3)}>
+                                   
+                                        <img src={thumbsupIcon} height={50} width={50}/>
+                                    
+                                </IconButton>
+                                <IconButton aria-label="delete" onClick={() => this.movieClick(2)}>
+                                   
+                                        <img src={trashIcon} height={50} width={50}/>
+                                    
+                                </IconButton>
+                                <IconButton aria-label="delete" onClick={() => this.movieClick(4)}>
+                                 
+                                        <img src={starfaceIcon} height={50} width={50}/>
+                                   
+                                </IconButton>
+                                </Grid>
+                            
                             </CardActions>
                         </Card>
+
+                        <Button variant="contained" color="primary" onClick={this.handleReset}>
+                                    Reset
+                                </Button>
                        
                         </div>
                         
