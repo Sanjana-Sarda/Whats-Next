@@ -18,7 +18,7 @@ import starfaceIcon  from '../images/starface_icon.svg'
 import thumbsupIcon from '../images/thumbsup_icon.svg'
 import trashIcon from '../images/trash_icon.svg'
 import frownIcon from '../images/frown_icon.svg'
-import unicornLogo from "../images/unicornLogo.svg"
+import unicornLogo from "/src/images/unicornlogo.svg"
 
 import TitleLine from "/src/images/title_line.svg"
 
