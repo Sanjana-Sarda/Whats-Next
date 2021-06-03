@@ -26,7 +26,7 @@ import { StylesProvider} from '@material-ui/core/styles';
 
 import "./button.css"
 
-const ENDPOINT = "http://lvh.me:4001/"; //"http://lvh.me:4001";
+const ENDPOINT = "https://whats-next-server.herokuapp.com/"; //"http://lvh.me:4001";
 
 
 const { Component } = React;

@@ -40,7 +40,7 @@ io.sockets.on('connection', function(socket) {
         socket.nservices = ['Disney+', 'Prime Video', 'Hulu', 'Netflix'];
         socket.ngenres = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 
                           'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 
-                          'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
+                          'War', 'Crime', 'Thriller', 'Romance', 'History', 
                           'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 
                           'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'];
         socket.first = [];
