@@ -40,6 +40,14 @@ io.sockets.on('connection', function(socket) {
     socket.on('room', function(room) {
         socket.join(room);
     });
+
+    socket.history = [];
+    socket.nservices = ['Disney+', 'Prime Video', 'Hulu', 'Netflix'];
+    socket.ngenres = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Western', 'Animation', 'Fantasy', 'Biography', 'Drama', 'Music', 'War', 'Crime', 'Fantasy', 'Thriller', 'Romance', 'History', 
+      'Mystery', 'Horror', 'Sport', 'Documentary', 'Musical', 'News', 'Short', 'Reality-TV', 'Film-Noir', 'Talk Show'];
+    socket.first = [];
+    socket.second = [];
+    socket.third = [];
     
     //client sending username 
     socket.on('send-nickname', function(nickname) {
@@ -52,7 +60,67 @@ io.sockets.on('connection', function(socket) {
         });
         console.log(socket.name)
     });
+
+    socket.on('settings', function (services, genres){
+      services.forEach(function (serv) {
+        if(socket.nservices.indexOf(serv)!=-1){
+            socket.nservices.spice(socket.nservices.indexOf(serv), 1);
+        }
+      });
+    
+      genres.forEach(function (gen) {
+        if(socket.ngenres.indexOf(gen)!=-1){
+            socket.ngenres.spice(socket.ngenres.indexOf(gen), 1);
+        }
+      });
+    });
+    
+    socket.on('pick_first_movie', function (){
+      const reqstuff = {
+        method: 'post', 
+        url: 'https://whats-next-188.herokuapp.com/ini',
+        data: {
+          nservices = socket.nservices,
+          ngenres = socket.ngenres
+        }
+      };
+      axios.post(reqstuff)
+      .then(response => {
+        var obj = JSON.parse(response);
+        socket.first = obj.first;
+        socket.second = obj.second;
+      });
+      socket.emit(socket.first);
+    });
+    
+    
+    socket.on('pick_movie', function (movie_name, movie_rating){
+      if ((socket.first.length===1) && (socket.second.length===1)){
+        socket.emit(socket.second);
+        socket.first = socket.first + movie_rating; //concatenates
+      }
+      const reqstuff = {
+        method: 'post', 
+        url: 'https://whats-next-188.herokuapp.com/recs',
+        data: {
+          'nservices': socket.nservices,
+          'ngenres': socket.ngenres,
+          'first': socket.first,
+          'second': socket.second,
+          'history': socket.history
+        }
+      };
+      axios.post(reqstuff)
+      .then(response => {
+        var obj = JSON.parse(response);
+        socket.first = obj.first;
+        socket.second = obj.second;
+        socket.history = history + socket.first
+      });
+    
+    });
 });
+
 
 
 io.sockets.on("disconnect", () => {
