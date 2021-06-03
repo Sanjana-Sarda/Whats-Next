@@ -72,13 +72,14 @@ def recsmovie(nservices, ngenres, first, second, history):
 
     index_names = ds[ds['Title'].isin(history)].index
     ds = ds.drop(index_names)
-    ds.reset_index()
+    ds = ds.reset_index()
     mat = preprocess(ds, service)
 
     #compute cosine similarity
     sig = cosine_similarity(mat, mat)
     #reverse maping of indices and titles
     indices = pd.Series(ds.index, index = ds['Title']).drop_duplicates()
+    print(len(indices))
 
     data['first'] = ds['Title'].iloc[give_recomendation(first[0], first[1], indices, sig)]
     
