@@ -24,8 +24,8 @@ class ServiceCheckBoxes extends Component {
         this.state = {
             title: "Services",
             lP: "top", 
-            services: [{name: 'Prime', icon: primeIcon},{name: 'Netflix',icon: netflixIcon},
-                       {name: 'Disney', icon: disneyIcon},{name: 'Hulu',icon: huluIcon}],
+            services: [{name: 'Prime Video', icon: primeIcon},{name: 'Netflix',icon: netflixIcon},
+                       {name: 'Disney+', icon: disneyIcon},{name: 'Hulu',icon: huluIcon}],
         }
     }
 
@@ -45,8 +45,9 @@ class ServiceCheckBoxes extends Component {
                                 control={<Checkbox />}
                                 labelPlacement={this.state.lP}
                                 label={
-                                  <img src={item.icon}/>
+                                  <img src={item.icon} alt={item.name}/>
                                 }
+                                onChange={this.props.onChange}
                             />
                             </Grid>
                     }, this)}

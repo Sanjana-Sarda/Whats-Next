@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles, withStyles, StylesProvider} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid'
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -19,7 +18,6 @@ import "./stepperstyles.css"
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 import TitleLine from "/src/images/title_line.svg"
-import { PlayCircleFilledWhite } from '@material-ui/icons';
 
 const { Component } = React;
 
@@ -210,24 +208,43 @@ class MainStepper extends Component {
 
     getServices = (val) => {
         if(val.target.checked){ 
-            if(this.state.picked_services != [])
-                this.state.picked_services = this.state.picked_services.concat(val.target.value)
-            
+            if(this.state.picked_services !== [])
+                var joined = this.state.picked_services.concat(val.target.value);
+                this.setState({picked_services: joined});
         }
         else{
-            var array = [...this.state.picked_services]; // make a separate copy of the array
-            var index = array.indexOf(val.target.value)
+            var arr = [...this.state.picked_services]; // make a separate copy of the array
+            var index = arr.indexOf(val.target.value)
             if (index !== -1) {
-                array.splice(index, 1);
-                this.state.picked_services=array;
+                arr.splice(index, 1);
             }
         }
     }
 
     onSubmitSerivces = (e) => {
-        this.props.submitServices(); 
+        this.props.submitServices(this.state.picked_services); 
         this.handleNext(); 
     }
+
+    getGenres = (val) => {
+      if(val.target.checked){ 
+          if(this.state.picked_genres !== [])
+              var joined = this.state.picked_genres.concat(val.target.value);
+              this.setState({picked_genres: joined});
+      }
+      else{
+          var arr = [...this.state.picked_genres]; // make a separate copy of the array
+          var index = arr.indexOf(val.target.value)
+          if (index !== -1) {
+              arr.splice(index, 1);
+          }
+      }
+  }
+
+    onSubmitGenres = (e) => {
+      this.props.submitGenres(this.state.picked_genres); 
+      this.handleNext(); 
+  }
 
     render() {
  
@@ -241,7 +258,7 @@ class MainStepper extends Component {
                             <Typography variant="h3" component="h2" gutterBottom className={styles.title} >
                                 {getStepContent(this.state.activeStep)}
                             </Typography>
-                            <img src={TitleLine}/>
+                            <img src={TitleLine} alt="titleline"/>
                         </Grid>
                        
                     </Grid>
@@ -276,7 +293,7 @@ class MainStepper extends Component {
 
                     {this.state.activeStep === 2 &&
                     (<Grid item xs={12} >
-                        <ServiceCheckboxes />
+                        <ServiceCheckboxes onChange={this.getServices}/>
                         <br/>
                         <Button variant="contained" color="primary" onClick={this.onSubmitSerivces} className={styles.submit_btn} style={{marginLeft:-15,marginTop:-10}}>
                                 {'Next'}
@@ -285,9 +302,9 @@ class MainStepper extends Component {
 
                     {this.state.activeStep === 3 &&
                     (<Grid item xs={12} >
-                        <GenresCheckboxes />
+                        <GenresCheckboxes onChange={this.getGenres}/>
                         <br/>
-                        <Button variant="contained" color="primary" onClick={this.onSubmitSerivces} className={styles.submit_btn} style={{marginLeft:-10}} >
+                        <Button variant="contained" color="primary" onClick={this.onSubmitGenres} className={styles.submit_btn} style={{marginLeft:-10}} >
                                 {'Next'}
                         </Button>
                     </Grid>)}

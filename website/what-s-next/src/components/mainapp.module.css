@@ -34,4 +34,27 @@
       
   }
 
+  .card {
+    max-width: 400px;
+    display: 'block';
+
+  }
+  .cardmedia {
+    height: 160px;
+  }
+  .cardtext {
+    height: 130px; 
+    overflow: scroll;
+    background: #C978E9; 
+  }
+  .cardfont{
+      color: white; 
+  }
+
+  .cardbuttons{
+      background: black; 
+  }
+
+
+
   
