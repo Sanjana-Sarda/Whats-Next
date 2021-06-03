@@ -12,6 +12,12 @@ import MainStepper from '/src/components/main_stepper'
 import Button from '@material-ui/core/Button';
 import socketIOClient from "socket.io-client";
 import axios from 'axios'; 
+import IconButton from '@material-ui/core/IconButton';
+import { ReactComponent as starfaceIcon }  from '../images/starface_icon.svg'
+import thumbsupIcon from '../images/thumbsup_icon.svg'
+import trashIcon from '../images/trash_icon.svg'
+import frownIcon from '../images/frown_icon.svg'
+
 const ENDPOINT = "http://lvh.me:4001";
 
 
@@ -175,7 +181,7 @@ class MainApp extends Component {
                 nservices: this.state.nservices,
                 ngenres: this.state.ngenres,
             };
-            const req2 = JSON.stringify(req); 
+            const req2 = JSON.stringify({req}); 
             console.log(req2); 
             axios.post(`https://whats-next-188.herokuapp.com/ini`, { req2 })
                 .then(res => {
@@ -288,6 +294,9 @@ class MainApp extends Component {
                             <Button variant="contained" color="primary" onClick={this.handleReset}>
                                 Reset
                             </Button>
+                            <IconButton aria-label="delete">
+                                <starfaceIcon />
+                            </IconButton>
                             </CardActions>
                         </Card>
                        
