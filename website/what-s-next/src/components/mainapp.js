@@ -5,17 +5,20 @@ import Grid from '@material-ui/core/Grid'
 import * as homeStyles from "/src/components/mainapp.module.css"
 import MainStepper from '/src/components/main_stepper'
 import Button from '@material-ui/core/Button';
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://lvh.me:4001";
 
 
 const { Component } = React;
 
-/* const socket = socketIOClient(ENDPOINT);
+const socket = socketIOClient(ENDPOINT);
 var room = "abc123";
 socket.on('connect', function() {
     // Connected, let's sign-up for to receive messages for this room
     socket.emit('room', room);
     console.log("Connecting room....")
 }); 
+/*
 
 makeRequest () {
     // PUT request using axios with async/await
@@ -36,7 +39,7 @@ class MainApp extends Component {
         this.state = {
             username: '',
             friend: '',
-            people: testing_ppl,
+            people: [],
             response: '',
             nservices: [], 
             ngenres: [],
@@ -54,9 +57,27 @@ class MainApp extends Component {
     setUsername = (val) => {
         this.setState({ username: val.target.value });
     }
+    addOtherUsers = (val) => {
+        if (val !== this.state.username){
+            if(this.state.people.indexOf(val) === -1)
+                this.setState({people: this.state.people.concat({name: val})});
+        } 
+    }
+    findOtherUsers = () => {
+        socket.on("New User Joined", function(user) {
+            // Connected, let's sign-up for to receive messages for this room
+            this.addOtherUsers(user)
+            console.log("New User Joined ")
+            console.log(this.state.people)
+        }.bind(this));
+    }
     submitUsername = (e) =>  {
         console.log('Username submitted');
         console.log(this.state.username);
+        this.setState({ username: this.state.username });
+        socket.emit('send-nickname', this.state.username);
+        console.log("Connecting send nickname...")
+        e.preventDefault();
     }
 
     setFriend = (val) => {
@@ -101,7 +122,7 @@ class MainApp extends Component {
 
 
     render() {
-       
+        this.findOtherUsers();
         return (
             <div>  
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -113,14 +134,14 @@ class MainApp extends Component {
                     (
                         <Button variant="contained" color="primary" onClick={() => this.handleNext()}>Start</Button>
                     )}
-                    {this.state.activeStep == 1 &&
+                    {this.state.activeStep === 1 &&
                     (
                         <MainStepper username={this.state.username} setUsername={this.setUsername} submitUsername={this.submitUsername}
                                      friend={this.state.friend} people={this.state.people} setFriend={this.setFriend} submitFriend={this.submitFriend} 
                                      picked_services={this.state.picked_services} submitServices={this.submitServices}
                                      finishOptions={this.handleNext}/>
                     )}
-                    {this.state.activeStep == 2 &&
+                    {this.state.activeStep === 2 &&
                     (
                         <Button variant="contained" color="primary" onClick={this.handleReset}>Reset</Button>
                     )}

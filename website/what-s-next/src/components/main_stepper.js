@@ -199,7 +199,7 @@ class MainStepper extends Component {
     }
 
     onSubmitUsername = (e) => {
-        this.props.submitUsername(); 
+        this.props.submitUsername(e); 
         this.handleNext(); 
     }
 
@@ -247,7 +247,7 @@ class MainStepper extends Component {
                     </Grid>
                     
                     
-                    {this.state.activeStep == 0 &&
+                    {this.state.activeStep === 0 &&
                     (<Grid item xs={12} >
                         <div className={styles.textfield}>
                         <MuiThemeProvider theme={theme}>
@@ -262,7 +262,7 @@ class MainStepper extends Component {
                         </Button>
                     </Grid>)}
 
-                    {this.state.activeStep == 1 &&
+                    {this.state.activeStep === 1 &&
                     (<Grid item xs={12} >
                         <div className={styles.radiobtns}>
                         <RadioButtons people={this.props.people} value={this.props.friend}
@@ -274,7 +274,7 @@ class MainStepper extends Component {
                         </Button>
                     </Grid>)}
 
-                    {this.state.activeStep == 2 &&
+                    {this.state.activeStep === 2 &&
                     (<Grid item xs={12} >
                         <ServiceCheckboxes />
                         <br/>
@@ -283,7 +283,7 @@ class MainStepper extends Component {
                         </Button>
                     </Grid>)}
 
-                    {this.state.activeStep == 3 &&
+                    {this.state.activeStep === 3 &&
                     (<Grid item xs={12} >
                         <GenresCheckboxes />
                         <br/>
@@ -292,7 +292,7 @@ class MainStepper extends Component {
                         </Button>
                     </Grid>)}
 
-                    {this.state.activeStep == 4 &&
+                    {this.state.activeStep === 4 &&
                     (<Grid item xs={12} >
                         <div className={styles.finalPage}>
                             <Button variant="contained" color="primary" onClick={this.props.finishOptions} className={styles.startMatchingBtn} >
