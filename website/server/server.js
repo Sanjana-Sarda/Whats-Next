@@ -93,30 +93,57 @@ io.sockets.on('connection', function(socket) {
       socket.emit(socket.first);
     });
     
-    
+  
     socket.on('pick_movie', function (movie_name, movie_rating){
-      if ((socket.first.length===1) && (socket.second.length===1)){
-        socket.emit(socket.second);
-        socket.first = socket.first + movie_rating; //concatenates
+      //need to add checker for match right here
+      //probs make an array of all fours and push onto it if movie_rating===4
+      //then compare all clients' 4 ratings
+      //need a special emit message for matchfound
+
+      //place the movie name and rating in the correct place 
+      if ((socket.first.length===1) && (socket.first[0].localeCompare(movie_name)===0)){
+        socket.first = socket.first.push(movie_rating); //concatenates
       }
-      const reqstuff = {
-        method: 'post', 
-        url: 'https://whats-next-188.herokuapp.com/recs',
-        data: {
-          'nservices': socket.nservices,
-          'ngenres': socket.ngenres,
-          'first': socket.first,
-          'second': socket.second,
-          'history': socket.history
-        }
-      };
-      axios.post(reqstuff)
-      .then(response => {
-        var obj = JSON.parse(response);
-        socket.first = obj.first;
-        socket.second = obj.second;
-        socket.history = history + socket.first
-      });
+      else if ((socket.second.length===1) && (socket.second[0].localeCompare(movie_name)===0)){
+        socket.second = socket.second.push(movie_rating); //concatenates
+      }       
+      else if ((socket.third.length===1) && (socket.third[0].localeCompare(movie_name)===0)){
+        socket.third = socket.third.push(movie_rating); //concatenates
+      }
+
+       
+
+      //figure out which one is still missing and push 
+      if ((socket.first.length===1)){
+        socket.emit(socket.first); 
+      }
+      else if ((socket.second.length===1)){
+        socket.emit(socket.second); 
+      }
+      else if ((socket.third.length===1)){
+        socket.emit(socket.third); 
+      }
+      else {
+        const reqstuff = {
+          method: 'post', 
+          url: 'https://whats-next-188.herokuapp.com/recs',
+          data: {
+            'nservices': socket.nservices,
+            'ngenres': socket.ngenres,
+            'first': socket.first,
+            'second': socket.second,
+            'history': socket.history
+          }
+        };
+        axios.post(reqstuff)
+        .then(response => {
+          var obj = JSON.parse(response);
+          socket.first = obj.first;
+          socket.second = obj.second;
+          socket.history = history + socket.first
+        });
+        socket.emit(socket.first); 
+      }
     
     });
 });
