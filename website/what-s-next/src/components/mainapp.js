@@ -19,7 +19,7 @@ import thumbsupIcon from '../images/thumbsup_icon.svg'
 import trashIcon from '../images/trash_icon.svg'
 import frownIcon from '../images/frown_icon.svg'
 
-const ENDPOINT = "http://lvh.me:4001/"; //"http://lvh.me:4001";
+const ENDPOINT = "https://whats-next-server.herokuapp.com/"; //"http://lvh.me:4001";
 
 
 const { Component } = React;
