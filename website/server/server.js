@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const axios = require("axios");
 
 const port = process.env.PORT || 4001;
 const index = require("./routes/index");
@@ -80,8 +81,8 @@ io.sockets.on('connection', function(socket) {
         method: 'post', 
         url: 'https://whats-next-188.herokuapp.com/ini',
         data: {
-          nservices = socket.nservices,
-          ngenres = socket.ngenres
+          "nservices": socket.nservices,
+          "ngenres": socket.ngenres
         }
       };
       axios.post(reqstuff)
